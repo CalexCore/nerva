@@ -167,7 +167,7 @@ namespace cryptonote
       * @note see Blockchain::cleanup_handle_incoming_blocks
       */
      bool cleanup_handle_incoming_blocks(bool force_sync = false);
-     	     	
+
      /**
       * @brief check the size of a block against the current maximum
       *
@@ -449,7 +449,7 @@ namespace cryptonote
       * @note see tx_memory_pool::get_txpool_backlog
       */
      bool get_txpool_backlog(std::vector<tx_backlog_entry>& backlog) const;
-     
+
      /**
       * @copydoc tx_memory_pool::get_transactions
       * @param include_unrelayed_txes include unrelayed txes in result
@@ -564,7 +564,7 @@ namespace cryptonote
       * @brief get a single block's weight
       */
      difficulty_type get_block_weight(uint64_t height) const;
-     
+
      /**
       * @brief get an uncle block's individual weight
       */
@@ -691,12 +691,6 @@ namespace cryptonote
      uint64_t get_earliest_ideal_height_for_version(uint8_t version) const;
 
      /**
-      * @brief gets start_time
-      *
-      */
-     std::time_t get_start_time() const;
-
-     /**
       * @brief tells the Blockchain to update its checkpoints
       *
       * This function will check if enough time has passed since the last
@@ -775,12 +769,12 @@ namespace cryptonote
       * @brief get the tx pubkey from the transaction extra field
       */
      std::vector<std::string> get_tx_pubkey(std::string tx_extra);
-     
+
      /**
       * @brief get the network type we're on
       *
       * @return which network are we on?
-      */     
+      */
      network_type get_nettype() const { return m_nettype; };
 
      /**
@@ -999,8 +993,6 @@ namespace cryptonote
      bool m_disable_dns_checkpoints;
 
      size_t block_sync_size;
-
-     time_t start_time;
 
      std::unordered_set<crypto::hash> bad_semantics_txes[2];
      boost::mutex bad_semantics_txes_lock;

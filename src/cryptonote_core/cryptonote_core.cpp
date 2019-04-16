@@ -215,7 +215,7 @@ namespace cryptonote
     if (m_nettype != MAINNET || m_disable_dns_checkpoints) return true;
 
     if (m_checkpoints_updating.test_and_set()) return true;
-    
+
     bool res = true;
     if (time(NULL) - m_last_dns_checkpoints_update >= 3600)
     {
@@ -311,7 +311,7 @@ namespace cryptonote
     std::string qs = command_line::get_arg(vm, arg_quicksync);
     if (!qs.empty())
     {
-      
+
       auto qs_file = boost::filesystem::path(qs);
       boost::system::error_code ignore;
       if (boost::filesystem::exists(qs_file, ignore))
@@ -397,8 +397,6 @@ namespace cryptonote
   //-----------------------------------------------------------------------------------------------
   bool core::init(const boost::program_options::variables_map& vm, const char *config_subdir, const cryptonote::test_options *test_options)
   {
-    start_time = std::time(nullptr);
-
     if (test_options != NULL)
     {
       m_nettype = FAKECHAIN;
@@ -1016,13 +1014,13 @@ namespace cryptonote
       std::vector<transaction> txs;
       std::vector<crypto::hash> missed_txs;
       uint64_t coinbase_amount = get_outs_money_amount(b.miner_tx);
-      this->get_transactions(b.tx_hashes, txs, missed_txs);      
+      this->get_transactions(b.tx_hashes, txs, missed_txs);
       uint64_t tx_fee_amount = 0;
       for(const auto& tx: txs)
       {
         tx_fee_amount += get_tx_fee(tx);
       }
-      
+
       emission_amount += coinbase_amount - tx_fee_amount;
       total_fee_amount += tx_fee_amount;
       return true;
@@ -1051,7 +1049,7 @@ namespace cryptonote
         encoded_pkey.append(&hex[(b & 0xF0) >> 4], 1);
         encoded_pkey.append(&hex[b & 0xF], 1);
     }
-    
+
     return encoded_pkey;
   }
 
@@ -1059,7 +1057,7 @@ namespace cryptonote
   {
     const char* x = tx_extra.c_str();
     std::vector<uint8_t> decoded_extra;
-    
+
     size_t len = tx_extra.length() / 2;
     char tmp[3] = { 0 };
 
@@ -1078,7 +1076,7 @@ namespace cryptonote
 
     for (size_t i = 0; i < a_keys.size(); i++)
       p_keys.push_back(public_key_to_string(a_keys.at(i)));
-    
+
     return p_keys;
   }
   //-----------------------------------------------------------------------------------------------
@@ -1446,7 +1444,7 @@ namespace cryptonote
   bool core::get_pool_transaction(const crypto::hash &id, cryptonote::blobdata& tx) const
   {
     return m_mempool.get_transaction(id, tx);
-  }  
+  }
   //-----------------------------------------------------------------------------------------------
   bool core::pool_has_tx(const crypto::hash &id) const
   {
@@ -1485,7 +1483,7 @@ namespace cryptonote
   //-----------------------------------------------------------------------------------------------
   bool core::get_uncle_by_hash(const crypto::hash &h, block &uncle) const
   {
-    try 
+    try
     {
       uncle = m_blockchain_storage.get_db().get_uncle(h);
       return true;
@@ -1723,11 +1721,6 @@ namespace cryptonote
     boost::filesystem::path path(m_config_folder);
     boost::filesystem::space_info si = boost::filesystem::space(path);
     return si.available;
-  }
-  //-----------------------------------------------------------------------------------------------
-  std::time_t core::get_start_time() const
-  {
-    return start_time;
   }
   //-----------------------------------------------------------------------------------------------
   void core::graceful_exit()

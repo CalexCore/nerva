@@ -1,22 +1,22 @@
 // Copyright (c) 2017-2018, The Masari Project
 // Copyright (c) 2014-2018, The Monero Project
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification, are
 // permitted provided that the following conditions are met:
-// 
+//
 // 1. Redistributions of source code must retain the above copyright notice, this list of
 //    conditions and the following disclaimer.
-// 
+//
 // 2. Redistributions in binary form must reproduce the above copyright notice, this list
 //    of conditions and the following disclaimer in the documentation and/or other
 //    materials provided with the distribution.
-// 
+//
 // 3. Neither the name of the copyright holder nor the names of its contributors may be
 //    used to endorse or promote products derived from this software without specific
 //    prior written permission.
-// 
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
 // EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
 // MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
@@ -26,7 +26,7 @@
 // INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
 // STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// 
+//
 // Parts of this file are originally copyright (c) 2012-2013 The Cryptonote developers
 
 #include "include_base_utils.h"
@@ -201,7 +201,6 @@ namespace cryptonote
     res.block_size_limit = m_core.get_blockchain_storage().get_current_cumulative_blocksize_limit();
     res.block_size_median = m_core.get_blockchain_storage().get_current_cumulative_blocksize_median();
     res.status = CORE_RPC_STATUS_OK;
-    res.start_time = m_restricted ? 0 : (uint64_t)m_core.get_start_time();
     res.free_space = m_restricted ? std::numeric_limits<uint64_t>::max() : m_core.get_free_space();
     res.offline = m_core.offline();
     res.bootstrap_daemon_address = m_bootstrap_daemon_address;
@@ -644,7 +643,7 @@ namespace cryptonote
       uint32_t i = 0;
       std::string tx_hash = epee::string_tools::pod_to_hex(cryptonote::get_transaction_hash(tx));
       uint64_t tx_amount = (uint64_t)-1;
-      
+
       bool found = false;
 
       for(const tx_out& o: tx.vout)
@@ -698,10 +697,10 @@ namespace cryptonote
 
         ++i;
       }
-      
+
       if (!found)
         continue;
-        
+
       std::vector<tx_extra_field> tx_extra_fields;
       std::string payment_id_string = "";
 
@@ -1032,7 +1031,7 @@ namespace cryptonote
       LOG_PRINT_L0(res.status);
       return true;
     }
-    
+
     cryptonote::address_parse_info info;
     if(!get_account_address_from_str(info, m_nettype, req.miner_address))
     {
@@ -1109,7 +1108,7 @@ namespace cryptonote
     const miner& lMiner = m_core.get_miner();
     res.active = lMiner.is_mining();
     res.is_background_mining_enabled = lMiner.get_is_background_mining_enabled();
-    
+
     if ( lMiner.is_mining() ) {
       res.speed = lMiner.get_speed();
       res.threads_count = lMiner.get_threads_count();
@@ -1210,7 +1209,7 @@ namespace cryptonote
       return r;
 
     m_core.get_pool_transactions_and_spent_keys_info(res.transactions, res.spent_key_images, !request_has_rpc_origin || !m_restricted);
-    
+
     if (req.json_only)
     {
       for(auto& tx: res.transactions)
@@ -1241,7 +1240,7 @@ namespace cryptonote
     bool r;
     if (use_bootstrap_daemon_if_necessary<COMMAND_RPC_GET_BLOCKS_JSON>(invoke_http_mode::JON, "/get_blocks_json", req, res, r))
       return r;
-    
+
     for (size_t i = 0; i < req.heights.size(); i++)
     {
       if(m_core.get_current_blockchain_height() <= req.heights[i])
@@ -1249,7 +1248,7 @@ namespace cryptonote
         LOG_ERROR("Requested block at height " << req.heights[i] << " which is greater than top block height " << m_core.get_current_blockchain_height() - 1);
         continue;
       }
-      
+
       block blk;
       bool orphan = false;
       crypto::hash block_hash = m_core.get_block_id_by_height(req.heights[i]);
@@ -1257,7 +1256,7 @@ namespace cryptonote
       {
         LOG_ERROR("Block with hash " << block_hash << " not found in database");
       }
-    
+
       res.blocks.push_back(obj_to_json_str(blk));
     }
     res.status = CORE_RPC_STATUS_OK;
@@ -1450,7 +1449,7 @@ namespace cryptonote
       error_resp.message = "Wrong block blob";
       return false;
     }
-    
+
     // Fixing of high orphan issue for most pools
     // Thanks Boolberry!
     block b = AUTO_VAL_INIT(b);
@@ -1823,7 +1822,7 @@ namespace cryptonote
         return false;
       }
     }
-    
+
     block uncle;
     if(!m_core.get_uncle_by_hash(block_hash, uncle))
     {
@@ -1832,7 +1831,7 @@ namespace cryptonote
       return false;
     }
     uint64_t height = get_block_height(uncle);
-    
+
     if(!fill_uncle_header_response(uncle, height, block_hash, res.header_response))
     {
       error_resp.message = "Failed to fill uncle header response";
@@ -1841,7 +1840,7 @@ namespace cryptonote
     res.blob = string_tools::buff_to_hex_nodelimer(t_serializable_object_to_blob(uncle));
     res.json = obj_to_json_str(uncle);
     res.status = CORE_RPC_STATUS_OK;
-    
+
     return true;
   }
   //------------------------------------------------------------------------------------------------------------------------------
@@ -1896,7 +1895,6 @@ namespace cryptonote
     res.block_size_limit = m_core.get_blockchain_storage().get_current_cumulative_blocksize_limit();
     res.block_size_median = m_core.get_blockchain_storage().get_current_cumulative_blocksize_median();
     res.status = CORE_RPC_STATUS_OK;
-    res.start_time = (uint64_t)m_core.get_start_time();
     res.free_space = m_restricted ? std::numeric_limits<uint64_t>::max() : m_core.get_free_space();
     res.offline = m_core.offline();
     res.bootstrap_daemon_address = m_bootstrap_daemon_address;
@@ -2120,9 +2118,9 @@ namespace cryptonote
     PERF_TIMER(on_get_tx_pubkey);
 
     std::vector<std::string> p_keys = m_core.get_tx_pubkey(req.extra);
-    
+
     res.pubkey = p_keys[0];
-    
+
     if (p_keys.size() > 1)
       for (size_t i = 0; i < p_keys.size(); i++)
         res.additional.push_back(p_keys.at(i));
@@ -2282,7 +2280,7 @@ namespace cryptonote
     res.version = version;
     res.uri = tools::get_update_url(software, buildtag, version);
     res.hash = hash;
-    
+
     res.status = CORE_RPC_STATUS_OK;
     return true;
   }
