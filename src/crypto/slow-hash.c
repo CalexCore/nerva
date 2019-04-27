@@ -305,7 +305,7 @@ void cn_slow_hash_v7_8(const void *data, size_t length, char *hash, size_t iters
 }
 
 void cn_slow_hash(const void *data, size_t length, char *hash, int variant, int prehashed, size_t iters)
-{ 
+{
     uint32_t init_size_blk = INIT_SIZE_BLK;
     init_hash();
 
@@ -344,7 +344,7 @@ void cn_slow_hash(const void *data, size_t length, char *hash, int variant, int 
             pre_aes();
             _c = _mm_aesenc_si128(_c, _a);
             post_aes_novariant();
-        }   
+        }
     }
 
     finalize_hash();
@@ -362,7 +362,7 @@ void slow_hash_allocate_state(void)
 }
 
 void slow_hash_free_state(void)
-{ 
+{
     free(hp_state);
     free(salt_state);
 }
@@ -402,7 +402,6 @@ void cn_slow_hash_v11(const void *data, size_t length, char *hash, size_t iters,
         aes_sw_variant();
 
     finalize_hash();
-    free(salt_hash);
 }
 
 void cn_slow_hash_v10(const void *data, size_t length, char *hash, size_t iters, random_values *r, char *sp_bytes, uint8_t init_size_blk, uint16_t xx, uint16_t yy, uint16_t zz, uint16_t ww)
@@ -500,7 +499,7 @@ void cn_slow_hash(const void *data, size_t length, char *hash, int variant, int 
         memcpy(&state.hs, data, length);
     else
         hash_process(&state.hs, data, length);
-    
+
     memcpy(text, state.init, init_size_byte);
     memcpy(aes_key, state.hs.b, AES_KEY_SIZE);
     aes_ctx = (oaes_ctx *) oaes_alloc();
